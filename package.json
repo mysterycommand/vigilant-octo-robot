@@ -16,6 +16,8 @@
     "webpack-dev-server": "^1.14.1"
   },
   "scripts": {
+    "build": "webpack --config=config/webpack/production.babel.js",
+    "start": "webpack-dev-server --config=config/webpack/development.babel.js --port=3000 --inline --hot",
     "test": "mocha --compilers js:babel-register './test/**/*.test.js'"
   },
   "repository": {
