@@ -15,5 +15,5 @@ init((ctx, { ts, dts }, { w, h, hw, hh }) => {
     }
 
     ctx.fillStyle = '#0ff';
-    ctx.fillText(particles.length, 8, 56);
+    ctx.fillText(particles.length.toLocaleString(), 8, 56);
 });
