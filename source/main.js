@@ -10,7 +10,7 @@ init((ctx, { ts, dts }, { w, h, hw, hh }) => {
         particle.render(ctx);
     });
 
-    while (particles.length > 40) {
+    while (particles.length > 100) {
         particles.shift();
     }
 
