@@ -1,5 +1,4 @@
 export default function onResize(eventTarget, callback) {
-
     function resizeListener(/*event*/) {
         const {
             innerWidth: width,
