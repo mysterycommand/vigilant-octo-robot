@@ -1,5 +1,5 @@
-import onResize from '../lib/on-resize';
-import onTick from '../lib/on-tick';
+import onResize from '../util/on-resize';
+import onTick from '../util/on-tick';
 
 export default function init(draw) {
     const cvs = document.getElementById('js-canvas');
