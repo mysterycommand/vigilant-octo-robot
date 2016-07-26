@@ -1,11 +1,16 @@
 import init from './app/init';
 import Particle from './lib/particle';
 
-const particle = new Particle();
+const particles = [];
 
 init((ctx, { ts, dts }, { w, h, hw, hh }) => {
-    particle.px = hw;
-    particle.py = hh;
+    particles.push(new Particle(hw, hh));
+    particles.forEach(particle => {
+        particle.update(dts);
+        particle.render(ctx);
+    });
 
-    particle.render(ctx);
+    while (particles.length > 40) {
+        particles.shift();
+    }
 });
