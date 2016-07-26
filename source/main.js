@@ -1,10 +1,14 @@
 import onResize from './lib/on-resize';
 
+const cvs = document.getElementById('js-canvas');
+const ctx = cvs.getContext('2d');
+
 let w, h, hw, hh;
 
-onResize(window, ({w, h}) => {
-    w = w;
-    h = h;
-    hw = w / 2;
-    hh = h / 2;
+onResize(window, ({ width, height }) => {
+    cvs.width = w = width;
+    cvs.height = h = height;
+
+    hw = width / 2;
+    hh = height / 2;
 });

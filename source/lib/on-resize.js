@@ -1,11 +1,12 @@
 export default function onResize(eventTarget, callback) {
+
     function resizeListener(/*event*/) {
         const {
-            innerHeight: h,
-            innerWidth: w,
+            innerWidth: width,
+            innerHeight: height,
         } = eventTarget;
 
-        callback({ w, h });
+        callback({ width, height });
     }
 
     eventTarget.addEventListener('resize', resizeListener);
