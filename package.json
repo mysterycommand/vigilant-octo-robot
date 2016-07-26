@@ -2,7 +2,6 @@
   "name": "vigilant-octo-robot",
   "version": "1.0.0",
   "description": "A conversation about particle systems, effects queues, and their applications - with Matt Hayes",
-  "main": "null",
   "dependencies": {},
   "devDependencies": {},
   "scripts": {
@@ -13,17 +12,18 @@
     "url": "git+https://github.com/mysterycommand/vigilant-octo-robot.git"
   },
   "keywords": [
-    "particle",
-    "systems",
-    "effects",
-    "queues",
+    "particle systems",
+    "effects queues",
     "practical",
     "applications"
   ],
-  "author": "Matt Hayes",
+  "author": {
+    "name": "Matt Hayes",
+    "email": "matt@mysterycommand.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mysterycommand/vigilant-octo-robot/issues"
   },
-  "homepage": "https://github.com/mysterycommand/vigilant-octo-robot#readme"
+  "homepage": "https://mysterycommand.github.io/vigilant-octo-robot"
 }
