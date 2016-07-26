@@ -13,4 +13,7 @@ init((ctx, { ts, dts }, { w, h, hw, hh }) => {
     while (particles.length > 40) {
         particles.shift();
     }
+
+    ctx.fillStyle = '#0ff';
+    ctx.fillText(particles.length, 8, 56);
 });
