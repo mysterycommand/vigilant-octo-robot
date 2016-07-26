@@ -1,6 +1,11 @@
 import init from './app/init';
+import Particle from './lib/particle';
+
+const particle = new Particle();
 
 init((ctx, { ts, dts }, { w, h, hw, hh }) => {
-    ctx.fillStyle = '#f0f';
-    ctx.fillRect(hw - 50, hh - 50, 100, 100);
+    particle.px = hw;
+    particle.py = hh;
+
+    particle.render(ctx);
 });
