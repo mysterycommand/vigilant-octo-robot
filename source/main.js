@@ -2,6 +2,7 @@ import init from './app/init';
 import load from './app/load';
 import Particle from './lib/particle';
 
+const { random, round } = Math;
 const particles = [];
 
 load([
@@ -12,7 +13,7 @@ load([
 ], images => {
     init((ctx, { ts, dts }, { w, h, hw, hh, x, y, down }) => {
         // create a new particle per frame
-        particles.push(new Particle(x, y, (Math.round(Math.random()) ? images : null)));
+        particles.push(new Particle(x, y, (round(random()) ? images : null)));
 
         // update and render each particle
         particles.forEach(particle => {
