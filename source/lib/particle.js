@@ -19,7 +19,7 @@ export default class Particle {
         this.frames = frames;
         this.frame = -1;
 
-        const p = 800, o = floor(random() * p);
+        const p = 400 + floor(random() * 400), o = floor(random() * p);
         this.frameFn = function(ts) {
             const waveFn = getWaveFn(saw, p, 0, 4, o);
             return floor(waveFn(ts));
