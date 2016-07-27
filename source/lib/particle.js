@@ -1,10 +1,29 @@
-const { PI: π } = Math;
+const { PI: π, floor, random } = Math;
 const ππ = 2 * π;
 
+function saw(radians) {
+    return ((radians % ππ) / π) - 1;
+}
+
+function getWaveFn(fn, p, min, max, o = 0) {
+    const amp = (max - min) / 2;
+    const rpp = ππ / p;
+    return (ts) => amp * (1 + fn((o + ts) * rpp)) + min;
+}
+
 export default class Particle {
-    constructor(x = 0, y = 0) {
+    constructor(x = 0, y = 0, frames) {
         this.px = x;
         this.py = y;
+
+        this.frames = frames;
+        this.frame = -1;
+
+        const p = 400 + floor(random() * 400), o = floor(random() * p);
+        this.frameFn = function(ts) {
+            const waveFn = getWaveFn(saw, p, 0, 4, o);
+            return floor(waveFn(ts));
+        }
 
         this.vx = 0.5 - Math.random();
         this.vy = 0.5 - Math.random();
@@ -20,7 +39,7 @@ export default class Particle {
         this.fade = 0.01;
     }
 
-    update(dts) {
+    update(ts, dts) {
         this.px += this.vx * dts;
         this.py += this.vy * dts;
 
@@ -31,12 +50,21 @@ export default class Particle {
 
         this.radius *= this.scale;
         this.alpha -= this.fade;
+
+        this.frame = this.frameFn(ts);
     }
 
     render(ctx) {
-        const { px, py, radius, alpha, hue } = this;
-
+        const { alpha, frames } = this;
         ctx.globalAlpha = Math.max(0, alpha);
+
+        (frames)
+            ? this.renderFrame(ctx)
+            : this.renderBall(ctx);
+    }
+
+    renderBall(ctx) {
+        const { px, py, radius, hue } = this;
 
         ctx.fillStyle = `hsla(${hue},100%,50%,0.4)`;
         ctx.beginPath();
@@ -55,5 +83,14 @@ export default class Particle {
         ctx.arc(px, py, radius / 4, 0, ππ);
         ctx.closePath();
         ctx.fill();
+    }
+
+    renderFrame(ctx) {
+        const { px, py, frames, frame } = this;
+        const img = frames[frame], { width, height } = img;
+        const x = px - width / 2;
+        const y = py - height / 2;
+
+        ctx.drawImage(img, x, y, width, height);
     }
 }
