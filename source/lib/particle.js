@@ -1,20 +1,14 @@
-const { PI: π, floor } = Math;
+const { PI: π, floor, random } = Math;
 const ππ = 2 * π;
 
 function saw(radians) {
     return ((radians % ππ) / π) - 1;
 }
 
-function getWaveFn(fn, p, min, max) {
+function getWaveFn(fn, p, min, max, o = 0) {
     const amp = (max - min) / 2;
     const rpp = ππ / p;
-
-    return (ts) => amp * (1 + fn(ts * rpp)) + min;
-}
-
-function frameFn(ts) {
-    const waveFn = getWaveFn(saw, 500, 0, 4);
-    return floor(waveFn(ts));
+    return (ts) => amp * (1 + fn((o + ts) * rpp)) + min;
 }
 
 export default class Particle {
@@ -24,6 +18,12 @@ export default class Particle {
 
         this.frames = frames;
         this.frame = -1;
+
+        const p = 800, o = floor(random() * p);
+        this.frameFn = function(ts) {
+            const waveFn = getWaveFn(saw, p, 0, 4, o);
+            return floor(waveFn(ts));
+        }
 
         this.vx = 0.5 - Math.random();
         this.vy = 0.5 - Math.random();
@@ -51,7 +51,7 @@ export default class Particle {
         this.radius *= this.scale;
         this.alpha -= this.fade;
 
-        this.frame = frameFn(ts);
+        this.frame = this.frameFn(ts);
     }
 
     render(ctx) {
