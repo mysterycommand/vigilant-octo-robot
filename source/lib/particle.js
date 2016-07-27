@@ -11,6 +11,12 @@ export default class Particle {
 
         this.drag = 0.98;
         this.grav = 0.0125;
+
+        this.radius = 10;
+        this.scale = 1.025;
+
+        this.alpha = 1;
+        this.fade = 0.01;
     }
 
     update(dts) {
@@ -21,15 +27,18 @@ export default class Particle {
         this.vy *= this.drag;
 
         this.vy += this.grav;
+
+        this.radius *= this.scale;
+        this.alpha -= this.fade;
     }
 
     render(ctx) {
-        const { px, py } = this;
+        const { px, py, radius, alpha } = this;
 
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
 
         ctx.beginPath();
-        ctx.arc(px, py, 10, 0, ππ);
+        ctx.arc(px, py, radius, 0, ππ);
         ctx.closePath();
 
         ctx.fill();
