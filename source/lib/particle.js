@@ -15,6 +15,7 @@ export default class Particle {
         this.radius = 16;
         this.scale = 1.025;
 
+        this.hue = 242;
         this.alpha = 1;
         this.fade = 0.01;
     }
@@ -33,23 +34,23 @@ export default class Particle {
     }
 
     render(ctx) {
-        const { px, py, radius, alpha } = this;
+        const { px, py, radius, alpha, hue } = this;
 
         ctx.globalAlpha = Math.max(0, alpha);
 
-        ctx.fillStyle = 'rgba(13,1,248,0.41)';
+        ctx.fillStyle = `hsla(${hue},100%,50%,0.4)`;
         ctx.beginPath();
         ctx.arc(px, py, radius, 0, ππ);
         ctx.closePath();
         ctx.fill();
 
-        ctx.fillStyle = 'rgba(134,129,254,0.73)';
+        ctx.fillStyle = `hsla(${hue},100%,75%,0.75)`;
         ctx.beginPath();
         ctx.arc(px, py, radius / 2, 0, ππ);
         ctx.closePath();
         ctx.fill();
 
-        ctx.fillStyle = 'rgba(255,255,255,1)';
+        ctx.fillStyle = `hsla(${hue},0%,100%,1)`;
         ctx.beginPath();
         ctx.arc(px, py, radius / 4, 0, ππ);
         ctx.closePath();
