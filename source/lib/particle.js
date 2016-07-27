@@ -1,4 +1,4 @@
-const { PI: π, floor, random } = Math;
+const { PI: π, floor, max, random } = Math;
 const ππ = 2 * π;
 
 function saw(radians) {
@@ -25,8 +25,11 @@ export default class Particle {
             return floor(waveFn(ts));
         }
 
-        this.vx = 0.5 - Math.random();
-        this.vy = 0.5 - Math.random();
+        this.rotation = 0;
+        this.spin = (π - random() * ππ) / 500;
+
+        this.vx = 0.5 - random();
+        this.vy = 0.5 - random();
 
         this.drag = 0.98;
         this.grav = 0.0125;
@@ -43,6 +46,8 @@ export default class Particle {
         this.px += this.vx * dts;
         this.py += this.vy * dts;
 
+        this.rotation += this.spin * dts;
+
         this.vx *= this.drag;
         this.vy *= this.drag;
 
@@ -56,7 +61,7 @@ export default class Particle {
 
     render(ctx) {
         const { alpha, frames } = this;
-        ctx.globalAlpha = Math.max(0, alpha);
+        ctx.globalAlpha = max(0, alpha);
 
         (frames)
             ? this.renderFrame(ctx)
@@ -86,11 +91,15 @@ export default class Particle {
     }
 
     renderFrame(ctx) {
-        const { px, py, frames, frame } = this;
+        const { px, py, frames, frame, rotation } = this;
         const img = frames[frame], { width, height } = img;
-        const x = px - width / 2;
-        const y = py - height / 2;
+        const x = -width / 2;
+        const y = -height / 2;
 
+        ctx.save();
+        ctx.translate(px, py);
+        ctx.rotate(rotation);
         ctx.drawImage(img, x, y, width, height);
+        ctx.restore();
     }
 }
