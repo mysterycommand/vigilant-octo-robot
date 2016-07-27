@@ -14,7 +14,7 @@ init((ctx, { ts, dts }, { w, h, hw, hh }) => {
     });
 
     // if we go above a limit, start removing particles
-    while (particles.length > 100) {
+    while (particles.length > 500) {
         particles.shift();
     }
 

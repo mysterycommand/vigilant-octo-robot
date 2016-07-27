@@ -12,7 +12,7 @@ export default class Particle {
         this.drag = 0.98;
         this.grav = 0.0125;
 
-        this.radius = 10;
+        this.radius = 16;
         this.scale = 1.025;
 
         this.alpha = 1;
@@ -35,12 +35,24 @@ export default class Particle {
     render(ctx) {
         const { px, py, radius, alpha } = this;
 
-        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+        ctx.globalAlpha = Math.max(0, alpha);
 
+        ctx.fillStyle = 'rgba(13,1,248,0.41)';
         ctx.beginPath();
         ctx.arc(px, py, radius, 0, ππ);
         ctx.closePath();
+        ctx.fill();
 
+        ctx.fillStyle = 'rgba(134,129,254,0.73)';
+        ctx.beginPath();
+        ctx.arc(px, py, radius / 2, 0, ππ);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = 'rgba(255,255,255,1)';
+        ctx.beginPath();
+        ctx.arc(px, py, radius / 4, 0, ππ);
+        ctx.closePath();
         ctx.fill();
     }
 }
