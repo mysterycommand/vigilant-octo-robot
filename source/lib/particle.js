@@ -8,11 +8,19 @@ export default class Particle {
 
         this.vx = 0.5 - Math.random();
         this.vy = 0.5 - Math.random();
+
+        this.drag = 0.98;
+        this.grav = 0.0125;
     }
 
     update(dts) {
         this.px += this.vx * dts;
         this.py += this.vy * dts;
+
+        this.vx *= this.drag;
+        this.vy *= this.drag;
+
+        this.vy += this.grav;
     }
 
     render(ctx) {
