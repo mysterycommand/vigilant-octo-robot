@@ -13,8 +13,7 @@ function getWaveFn(fn, p, min, max, o = 0) {
 
 export default class Particle {
     constructor(x = 0, y = 0, frames) {
-        this.px = x;
-        this.py = y;
+        this.reset(x, y);
 
         this.frames = frames;
         this.frame = -1;
@@ -25,20 +24,10 @@ export default class Particle {
             return floor(waveFn(ts));
         }
 
-        this.rotation = 0;
         this.spin = (π - random() * ππ) / 500;
-
-        this.vx = 0.75 - random() * 1.5;
-        this.vy = 0.75 - random() * 1.5;
-
         this.drag = 0.98;
         this.grav = 0.025;
-
-        this.radius = 16;
         this.scale = 1.025;
-
-        this.hue = 242;
-        this.alpha = 1;
         this.fade = 0.01;
     }
 
@@ -101,5 +90,18 @@ export default class Particle {
         ctx.rotate(rotation);
         ctx.drawImage(img, x, y, width, height);
         ctx.restore();
+    }
+
+    reset(x, y) {
+        this.px = x;
+        this.py = y;
+
+        this.vx = 0.75 - random() * 1.5;
+        this.vy = 0.75 - random() * 1.5;
+
+        this.radius = 16;
+        this.rotation = 0;
+        this.alpha = 1;
+        this.hue = 242;
     }
 }
