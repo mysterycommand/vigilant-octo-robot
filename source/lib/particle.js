@@ -1,3 +1,5 @@
+import ball from './ball';
+
 const { PI: π, floor, max, random } = Math;
 const ππ = 2 * π;
 
@@ -60,25 +62,11 @@ export default class Particle {
     }
 
     renderBall(ctx) {
-        const { px, py, radius, hue } = this;
+        const { px, py, radius } = this;
+        const x = px - radius;
+        const y = py - radius;
 
-        ctx.fillStyle = `hsla(${hue},100%,50%,0.4)`;
-        ctx.beginPath();
-        ctx.arc(px, py, radius, 0, ππ);
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.fillStyle = `hsla(${hue},100%,75%,0.75)`;
-        ctx.beginPath();
-        ctx.arc(px, py, radius / 2, 0, ππ);
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.fillStyle = `hsla(${hue},0%,100%,1)`;
-        ctx.beginPath();
-        ctx.arc(px, py, radius / 4, 0, ππ);
-        ctx.closePath();
-        ctx.fill();
+        ctx.drawImage(ball, x, y, radius * 2, radius * 2);
     }
 
     renderFrame(ctx) {
