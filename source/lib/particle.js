@@ -28,11 +28,11 @@ export default class Particle {
         this.rotation = 0;
         this.spin = (π - random() * ππ) / 500;
 
-        this.vx = 0.5 - random();
-        this.vy = 0.5 - random();
+        this.vx = 0.75 - random() * 1.5;
+        this.vy = 0.75 - random() * 1.5;
 
         this.drag = 0.98;
-        this.grav = 0.0125;
+        this.grav = 0.025;
 
         this.radius = 16;
         this.scale = 1.025;
