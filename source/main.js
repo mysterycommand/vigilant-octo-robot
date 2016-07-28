@@ -30,7 +30,7 @@ load([
                 particle.vy = -particle.vy * 0.8;
             }
 
-            // pool "dead" particles
+            // pool "dead" particles, and bail early
             const isTransparent = particle.alpha <= 0;
             const isOutside = particle.px < 0 || w < particle.px;
             if (isTransparent || isOutside) {
