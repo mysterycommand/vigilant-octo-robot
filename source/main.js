@@ -29,8 +29,8 @@ load([
             particles.shift();
         }
 
+        // create a new particle (or 10) per frame
         for (let i = down ? 10 : 1; i; --i) {
-            // create a new particle per frame
             particles.push(new Particle(x, y, (round(random()) ? images : null)));
         }
 
