@@ -1,3 +1,5 @@
+import ball from './ball';
+
 const { PI: π, floor, max, random } = Math;
 const ππ = 2 * π;
 
@@ -13,32 +15,21 @@ function getWaveFn(fn, p, min, max, o = 0) {
 
 export default class Particle {
     constructor(x = 0, y = 0, frames) {
-        this.px = x;
-        this.py = y;
+        this.reset(x, y);
 
         this.frames = frames;
         this.frame = -1;
 
         const p = 400 + floor(random() * 400), o = floor(random() * p);
+        const waveFn = getWaveFn(saw, p, 0, 4, o);
         this.frameFn = function(ts) {
-            const waveFn = getWaveFn(saw, p, 0, 4, o);
             return floor(waveFn(ts));
         }
 
-        this.rotation = 0;
         this.spin = (π - random() * ππ) / 500;
-
-        this.vx = 0.75 - random() * 1.5;
-        this.vy = 0.75 - random() * 1.5;
-
         this.drag = 0.98;
         this.grav = 0.025;
-
-        this.radius = 16;
         this.scale = 1.025;
-
-        this.hue = 242;
-        this.alpha = 1;
         this.fade = 0.01;
     }
 
@@ -56,7 +47,9 @@ export default class Particle {
         this.radius *= this.scale;
         this.alpha -= this.fade;
 
-        this.frame = this.frameFn(ts);
+        if (this.frames) {
+            this.frame = this.frameFn(ts);
+        }
     }
 
     render(ctx) {
@@ -69,25 +62,11 @@ export default class Particle {
     }
 
     renderBall(ctx) {
-        const { px, py, radius, hue } = this;
+        const { px, py, radius } = this;
+        const x = px - radius;
+        const y = py - radius;
 
-        ctx.fillStyle = `hsla(${hue},100%,50%,0.4)`;
-        ctx.beginPath();
-        ctx.arc(px, py, radius, 0, ππ);
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.fillStyle = `hsla(${hue},100%,75%,0.75)`;
-        ctx.beginPath();
-        ctx.arc(px, py, radius / 2, 0, ππ);
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.fillStyle = `hsla(${hue},0%,100%,1)`;
-        ctx.beginPath();
-        ctx.arc(px, py, radius / 4, 0, ππ);
-        ctx.closePath();
-        ctx.fill();
+        ctx.drawImage(ball, x, y, radius * 2, radius * 2);
     }
 
     renderFrame(ctx) {
@@ -101,5 +80,18 @@ export default class Particle {
         ctx.rotate(rotation);
         ctx.drawImage(img, x, y, width, height);
         ctx.restore();
+    }
+
+    reset(x, y) {
+        this.px = x;
+        this.py = y;
+
+        this.vx = 0.75 - random() * 1.5;
+        this.vy = 0.75 - random() * 1.5;
+
+        this.radius = 16;
+        this.rotation = 0;
+        this.alpha = 1;
+        this.hue = 242;
     }
 }
