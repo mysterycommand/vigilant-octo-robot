@@ -12,19 +12,26 @@ load([
     './images/sparkle-1-1.png',
 ], images => {
     init((ctx, { ts, dts }, { w, h, hw, hh, x, y, down }) => {
-        // create a new particle per frame
-        particles.push(new Particle(x, y, (round(random()) ? images : null)));
-
         // update and render each particle
         particles.forEach(particle => {
             particle.update(ts, dts);
-            particle.hue = down ? 53 : 242;
+
+            if (particle.py > h - 50) {
+                particle.py = h - 50;
+                particle.vy = -particle.vy * 0.8;
+            }
+
             particle.render(ctx);
         });
 
         // if we go above a limit, start removing particles
-        while (particles.length > 500) {
+        while (particles.length > 1000) {
             particles.shift();
+        }
+
+        for (let i = down ? 10 : 1; i; --i) {
+            // create a new particle per frame
+            particles.push(new Particle(x, y, (round(random()) ? images : null)));
         }
 
         // a simple particle counter
