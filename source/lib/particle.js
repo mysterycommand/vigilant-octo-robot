@@ -45,7 +45,9 @@ export default class Particle {
         this.radius *= this.scale;
         this.alpha -= this.fade;
 
-        this.frame = this.frameFn(ts);
+        if (this.frames) {
+            this.frame = this.frameFn(ts);
+        }
     }
 
     render(ctx) {
