@@ -1,69 +1,43 @@
 import init from './app/init';
-import load from './app/load';
-
 import ParticleField from './lib/particle-field';
 
-import * as create from './lib/create';
-import * as update from './lib/update';
-import * as remove from './lib/remove';
+const SCROLL_RUNWAY_TOP = 200;
+const SCROLL_RUNWAY = 2000;
 
-import renderBall from './lib/render/ball';
-import renderSpark from './lib/render/spark';
+const stats = document.getElementById('js-stats');
 
-import status from './lib/status';
+const particleField = new ParticleField(5000);
+particleField.init();
 
-load([
-    './images/sparkle-1-0.png',
-    './images/sparkle-1-1.png',
-    './images/sparkle-1-2.png',
-    './images/sparkle-1-1.png',
-], images => {
-    const field = new ParticleField();
-    field.init();
+particleField.addCreateFns([(state, particle) => {
+    const { index } = particle.dataset;
 
-    field.addCreateFns([
-        create.alphaAndFade,
-        create.drag,
-        create.gravity,
-        create.position,
-        create.radiusAndScale,
-        create.rotationAndSpin,
-        create.velocity,
-    ]);
+    particle.dataset.translateTop = index * (100 + 20);
+    particle.dataset.translateBottom = index * (100 + 20) + 100;
 
-    field.addUpdateFns([
-        update.alphaByFade,
-        update.positionByHeight,
-        update.positionByVelocity,
-        update.radiusByScale,
-        update.rotationBySpin,
-        update.velocityByDrag,
-        update.velocityByGravity,
-    ]);
+    particle.style.backgroundColor = `hsl(${(index * (360 / 9)) % 360},50%,50%)`;
+    particle.style.position = 'absolute';
+    particle.style.transform = `translateY(${index * (100 + 20)}px)`;
+}]);
 
-    field.addRemoveFns([
-        remove.isOutsideBottom,
-        remove.isOutsideLeftRight,
-        remove.isTransparent,
-    ]);
+particleField.addUpdateFns([(state, particle) => {
+}]);
 
-    const renderers = [];
-    for (let i = 0, l = 20; i < l; ++i) {
-        const renderer = (i % 2)
-            ? renderBall(360 / l * i)
-            : renderSpark(images, 600, 600 / l * i);
+particleField.addRemoveFns([({ st, oh }, particle) => {
+    const { translateTop, translateBottom } = particle.dataset;
+    const viewTop = st - SCROLL_RUNWAY_TOP;
+    const viewBottom = st + oh + SCROLL_RUNWAY;
 
-        renderers.push(renderer);
-    }
+    return parseInt(translateBottom, 10) < viewTop || viewBottom < parseInt(translateTop, 10);
+}]);
 
-    let i = -1;
-    field.addRenderFns((state, particle) => {
-        particle.render || (particle.render = renderers[++i % renderers.length]);
-        particle.render(state, particle);
-    });
+particleField.addRenderFns([({ main }, particle) => {
+    main.appendChild(particle);
+}]);
 
-    init((state) => {
-        field.draw(state);
-        status(state);
-    });
+init((state) => {
+    const { main } = state;
+    const nodes = main.getElementsByTagName('*');
+    stats.innerHTML = `<code><pre>nodes: ${nodes.length}</pre></code>`;
+    particleField.draw(state);
 });

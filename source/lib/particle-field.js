@@ -13,7 +13,9 @@ export default class ParticleField {
     init() {
         const { active, pooled, size } = this;
         while (pooled.length < size) {
-            pooled.push({});
+            const particle = document.createElement('div');
+            particle.dataset.index = pooled.length;
+            pooled.push(particle);
         }
     }
 
@@ -31,10 +33,9 @@ export default class ParticleField {
 
     create(state) {
         const { pooled, active, createFns } = this;
-        const { down } = state;
 
         const created = pooled
-            .splice(0, (down ? 10 : 0))
+            .splice(0, 50)
             .map(particle => {
                 createFns.forEach(fn => {
                     fn(state, particle);
@@ -61,6 +62,7 @@ export default class ParticleField {
         this.active = active.reduce((accumulator, particle) => {
             if (removeFns.some(fn => fn(state, particle))) {
                 pooled.push(particle);
+                particle.remove();
                 return accumulator;
             }
 
