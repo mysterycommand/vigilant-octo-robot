@@ -11,9 +11,9 @@ function getWaveFn(fn, p, min, max, o = 0) {
     return (ts) => amp * (1 + fn((o + ts) * rpp)) + min;
 }
 
-export default function renderSpark(frames) {
-    const p = 400 + floor(random() * 400), o = floor(random() * p);
-    const waveFn = getWaveFn(saw, p, 0, 4, o);
+export default function renderSpark(frames, period) {
+    const offset = floor(random() * period);
+    const waveFn = getWaveFn(saw, period, 0, frames.length, offset);
 
     const frameFn = (ts) => {
         return floor(waveFn(ts));
