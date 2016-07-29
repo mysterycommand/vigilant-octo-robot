@@ -30,3 +30,7 @@ export function velocityByDrag(state, particle) {
 export function velocityByGravity(state, particle) {
     particle.vy += particle.gravity;
 }
+
+export function velocityByAntigravity(state, particle) {
+    particle.vy -= particle.gravity;
+}

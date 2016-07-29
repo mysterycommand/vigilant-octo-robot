@@ -38,7 +38,7 @@ load([
         update.radiusByScale,
         update.rotationBySpin,
         update.velocityByDrag,
-        update.velocityByGravity,
+        update.velocityByAntigravity,
     ]);
 
     field.addRemoveFns([
@@ -49,11 +49,7 @@ load([
 
     const renderers = [];
     for (let i = 0, l = 20; i < l; ++i) {
-        const renderer = (i % 2)
-            ? renderBall(360 / l * i)
-            : renderSpark(images, 600, 600 / l * i);
-
-        renderers.push(renderer);
+        renderers.push(renderBall(360 / l * i));
     }
 
     let i = -1;
