@@ -1,5 +1,3 @@
-import Particle from './particle';
-
 export default class ParticleField {
     constructor(size = 1000) {
         this.size = size;
@@ -15,8 +13,15 @@ export default class ParticleField {
     init() {
         const { active, pooled, size } = this;
         while (pooled.length < size) {
-            pooled.push(new Particle());
+            pooled.push({});
         }
+    }
+
+    draw(state) {
+        this.create(state);
+        this.update(state);
+        this.remove(state);
+        this.render(state);
     }
 
     addCreateFns(fns) { this.createFns = this.createFns.concat(fns); }
@@ -24,15 +29,15 @@ export default class ParticleField {
     addRemoveFns(fns) { this.removeFns = this.removeFns.concat(fns); }
     addRenderFns(fns) { this.renderFns = this.renderFns.concat(fns); }
 
-    create(stage) {
+    create(state) {
         const { pooled, active, createFns } = this;
-        const { down } = stage;
+        const { down } = state;
 
         const created = pooled
             .splice(0, (down ? 10 : 0))
             .map(particle => {
                 createFns.forEach(fn => {
-                    fn(stage, particle);
+                    fn(state, particle);
                 });
                 return particle;
             });
@@ -40,20 +45,21 @@ export default class ParticleField {
         this.active = active.concat(created);
     }
 
-    update(time, stage) {
+    update(state) {
         const { active, updateFns } = this;
+
         active.forEach(particle => {
             updateFns.forEach(fn => {
-                fn(time, stage, particle);
+                fn(state, particle);
             });
         });
     }
 
-    remove(stage) {
+    remove(state) {
         const { pooled, active, removeFns } = this;
 
         this.active = active.reduce((accumulator, particle) => {
-            if (removeFns.some(fn => fn(stage, particle))) {
+            if (removeFns.some(fn => fn(state, particle))) {
                 pooled.push(particle);
                 return accumulator;
             }
@@ -63,12 +69,12 @@ export default class ParticleField {
         }, []);
     }
 
-    render(ctx, time, stage) {
+    render(state) {
         const { active, renderFns } = this;
 
         active.forEach(particle => {
             renderFns.forEach(fn => {
-                fn(ctx, time, stage, particle);
+                fn(state, particle);
             });
         });
     }

@@ -31,7 +31,7 @@ export default function renderBall(hue) {
     const ball = new Image();
     ball.src = cvs.toDataURL('image/png');
 
-    return (ctx, time, stage, { px, py, radius, alpha }) => {
+    return ({ ctx }, { px, py, radius, alpha }) => {
         const x = px - radius;
         const y = py - radius;
 

@@ -30,6 +30,6 @@ export default function init(draw) {
         ctx.imageSmoothingEnabled = false;
 
         // do work with ts or dts here
-        draw(ctx, { ts, dts }, { w, h, hw, hh, x, y, down, });
+        draw({ ctx, ts, dts, w, h, hw, hh, x, y, down, });
     });
 }
