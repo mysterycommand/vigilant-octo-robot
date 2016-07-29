@@ -14,8 +14,7 @@ load([
     './images/sparkle-1-1.png',
 ], images => {
     const field = new ParticleField();
-
-    field.init(images);
+    field.init();
 
     function create(ctx, time, { x, y, down }, field) {
         const { pooled, active } = field;
