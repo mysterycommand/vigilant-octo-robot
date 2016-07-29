@@ -38,7 +38,7 @@ load([
         applyGravity,
         applyScale,
         applyFade,
-        // applyBounce,
+        applyBounce,
     ]);
 
     field.addRemoveFns([(stage, particle) => {
