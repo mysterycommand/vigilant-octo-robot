@@ -12,8 +12,6 @@ import renderSpark from './lib/render/spark';
 
 import status from './lib/status';
 
-const { floor, random, round } = Math;
-
 load([
     './images/sparkle-1-0.png',
     './images/sparkle-1-1.png',
@@ -49,11 +47,18 @@ load([
         remove.isTransparent,
     ]);
 
-    field.addRenderFns((state, particle) => {
-        particle.render || (particle.render = round(random())
-            ? renderBall(floor(random() * 360))
-            : renderSpark(images, 600, floor(random() * 600)));
+    const renderers = [];
+    for (let i = 0, l = 20; i < l; ++i) {
+        const renderer = (i % 2)
+            ? renderBall(360 / l * i)
+            : renderSpark(images, 600, 600 / l * i);
 
+        renderers.push(renderer);
+    }
+
+    let i = -1;
+    field.addRenderFns((state, particle) => {
+        particle.render || (particle.render = renderers[++i % renderers.length]);
         particle.render(state, particle);
     });
 

@@ -19,7 +19,8 @@ export default function renderSpark(frames, period, offset) {
     }
 
     return ({ ctx, ts }, { px, py, rotation, alpha }) => {
-        const img = frames[frameFn(ts)], { width, height } = img;
+        const frame = frameFn(ts);
+        const img = frames[frame], { width, height } = img;
         const x = -width / 2;
         const y = -height / 2;
 

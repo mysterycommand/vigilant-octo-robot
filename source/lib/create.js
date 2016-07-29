@@ -1,4 +1,4 @@
-const { PI: π, floor, random } = Math;
+const { PI: π, random } = Math;
 const ππ = 2 * π;
 
 export function alphaAndFade(state, particle) {
