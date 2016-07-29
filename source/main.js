@@ -2,10 +2,15 @@ import init from './app/init';
 import load from './app/load';
 
 import ParticleField from './lib/particle-field';
-import renderBall from './lib/renderables/render-ball';
-import renderSpark from './lib/renderables/render-spark';
 
-const { floor, random, round } = Math;
+import * as create from './lib/create';
+import * as update from './lib/update';
+import * as remove from './lib/remove';
+
+import renderBall from './lib/render/ball';
+import renderSpark from './lib/render/spark';
+
+import status from './lib/status';
 
 load([
     './images/sparkle-1-0.png',
@@ -16,82 +21,45 @@ load([
     const field = new ParticleField();
     field.init();
 
-    function create(ctx, time, { x, y, down }, field) {
-        const { pooled, active } = field;
+    field.addCreateFns([
+        create.alphaAndFade,
+        create.drag,
+        create.gravity,
+        create.position,
+        create.radiusAndScale,
+        create.rotationAndSpin,
+        create.velocity,
+    ]);
 
-        const created = pooled
-            .splice(0, (down ? 10 : 0))
-            .map(particle => {
-                const render = round(random())
-                    ? renderBall(floor(random() * 360))
-                    : renderSpark(images, 600);
+    field.addUpdateFns([
+        update.alphaByFade,
+        update.positionByHeight,
+        update.positionByVelocity,
+        update.radiusByScale,
+        update.rotationBySpin,
+        update.velocityByDrag,
+        update.velocityByAntigravity,
+    ]);
 
-                particle.reset(x, y, render);
-                return particle;
-            });
+    field.addRemoveFns([
+        remove.isOutsideBottom,
+        remove.isOutsideLeftRight,
+        remove.isTransparent,
+    ]);
 
-        field.active = active.concat(created);
+    const renderers = [];
+    for (let i = 0, l = 20; i < l; ++i) {
+        renderers.push(renderBall(360 / l * i));
     }
 
-    function update(ctx, { ts, dts }, { h }, field) {
-        field.active.forEach(particle => {
-            particle.update(ts, dts);
+    let i = -1;
+    field.addRenderFns((state, particle) => {
+        particle.render || (particle.render = renderers[++i % renderers.length]);
+        particle.render(state, particle);
+    });
 
-            if (particle.py > h - 50) {
-                particle.py = h - 50;
-                particle.vy = -particle.vy * 0.8;
-            }
-        });
-    }
-
-    function remove(ctx, time, { w }, field) {
-        const { pooled, active } = field;
-
-        field.active = active.reduce((accumulator, particle) => {
-            const isTransparent = particle.alpha <= 0;
-            const isOutside = particle.px < 0 || w < particle.px;
-
-            if (isTransparent || isOutside) {
-                pooled.push(particle);
-                return accumulator;
-            }
-
-            accumulator.push(particle);
-            return accumulator;
-        }, []);
-    }
-
-    function render(ctx, time, stage, { active }) {
-        active.forEach(particle => {
-            particle.render(ctx, time, stage, particle);
-        });
-    }
-
-    function status(ctx, { dts }, stage, { pooled, active }) {
-        // a simple status display
-        ctx.globalAlpha = 1;
-        ctx.font = '24px monospace';
-
-        [{
-            msg: `${Math.round(1000 / dts)}fps`,
-            col: '#0ff',
-        },{
-            msg: `pooled: ${pooled.length.toLocaleString()}`,
-            col: '#f0f',
-        },{
-            msg: `active: ${active.length.toLocaleString()}`,
-            col: '#ff0',
-        }].forEach(({ msg, col }, i) => {
-            ctx.fillStyle = col;
-            ctx.fillText(msg, 8, (i + 1) * 28);
-        })
-    }
-
-    init((ctx, time, stage) => {
-        create(ctx, time, stage, field);
-        update(ctx, time, stage, field);
-        remove(ctx, time, stage, field);
-        render(ctx, time, stage, field);
-        status(ctx, time, stage, field);
+    init((state) => {
+        field.draw(state);
+        status(state);
     });
 });

@@ -1,4 +1,4 @@
-const { PI: π, floor, random } = Math;
+const { PI: π, floor } = Math;
 const ππ = 2 * π;
 
 function saw(radians) {
@@ -11,16 +11,16 @@ function getWaveFn(fn, p, min, max, o = 0) {
     return (ts) => amp * (1 + fn((o + ts) * rpp)) + min;
 }
 
-export default function renderSpark(frames, period) {
-    const offset = floor(random() * period);
+export default function renderSpark(frames, period, offset) {
     const waveFn = getWaveFn(saw, period, 0, frames.length, offset);
 
     const frameFn = (ts) => {
         return floor(waveFn(ts));
     }
 
-    return (ctx, { ts }, stage, { px, py, rotation, alpha }) => {
-        const img = frames[frameFn(ts)], { width, height } = img;
+    return ({ ctx, ts }, { px, py, rotation, alpha }) => {
+        const frame = frameFn(ts);
+        const img = frames[frame], { width, height } = img;
         const x = -width / 2;
         const y = -height / 2;
 
