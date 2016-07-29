@@ -2,8 +2,8 @@ const { PI: π, floor, random } = Math;
 const ππ = 2 * π;
 
 export default class Particle {
-    constructor(x = 0, y = 0) {
-        this.reset(x, y);
+    constructor() {
+        this.reset(-1, -1);
 
         this.spin = (π - random() * ππ) / 500;
         this.drag = 0.98;
@@ -27,9 +27,10 @@ export default class Particle {
         this.alpha -= this.fade;
     }
 
-    reset(x, y) {
+    reset(x, y, render = () => {}) {
         this.px = x;
         this.py = y;
+        this.render = render;
 
         this.vx = 0.75 - random() * 1.5;
         this.vy = 0.75 - random() * 1.5;

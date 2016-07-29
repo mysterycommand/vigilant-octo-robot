@@ -10,7 +10,7 @@ export default class ParticleField {
     init() {
         const { active, pooled, size } = this;
         while (pooled.length < size) {
-            pooled.push(new Particle(-1, -1));
+            pooled.push(new Particle());
         }
     }
 }
