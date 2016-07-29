@@ -19,22 +19,37 @@
     <style>
         html,
         body,
-        canvas {
+        main {
             height: 100%;
             width: 100%;
         }
 
-        body {
+        body, pre {
             margin: 0;
         }
 
-        canvas {
-            background-color: #000;
+        main {
+            overflow-x: hidden;
+            overflow-y: scroll;
+            position: absolute;
+        }
+
+        main > div {
+            width: 100%;
+            height: 100px;
+        }
+
+        aside {
+            position: absolute;
+            left: 4px;
+            font-size: 24px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <canvas id="js-canvas" role="main"></canvas>
+    <main id="js-main" role="main"></main>
+    <aside id="js-stats" role="complimentary"></aside>
     <script src="./main.js" defer></script>
 </body>
 </html>
