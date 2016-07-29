@@ -1,14 +1,16 @@
 # Vigilant Octo-Robot
 > A conversation about particle systems, effects queues, and their applications - with Matt Hayes
 
-### Getting setup
+### Getting setup:
 ```bash
 $ git clone git@github.com:mysterycommand/vigilant-octo-robot.git
 $ cd vigilant-octo-robot
 $ npm install
-$ npm start
+$ npm start # uses webpack-dev-server
 ```
+… and that should be it! Uses Webpack and Babel to bundle everything as a `./main.js` and serves the `./source` folder (with it's simple `index.html` file pulling in the JS).
 
+### Credit where credit's due:
 This work is heavily inspired by a talk by Seb Lee-Delisle from 2007 called [AS3 Particles: 1000% Extra Free](http://seb.ly/2007/09/as3-particles-1000-extra-free/).
 
 The repo is organized into branches and step-wise PRs. Branches are labeled by number `01` - `13`, and each PR has been created agains the previous numbered branch (I hope that makes sense).
