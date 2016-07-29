@@ -11,6 +11,7 @@ load([
     './images/sparkle-1-1.png',
 ], images => {
     field.init(images);
+
     init((ctx, time, stage) => {
         const { pooled, active } = field;
         field.draw(ctx, time, stage);
