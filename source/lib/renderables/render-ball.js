@@ -29,4 +29,12 @@ ctx.fill();
 const ball = new Image();
 ball.src = cvs.toDataURL('image/png');
 
-export default ball;
+export default function renderBall() {
+    return (ctx, time, stage, { px, py, radius, alpha }) => {
+        const x = px - radius;
+        const y = py - radius;
+
+        ctx.globalAlpha = alpha;
+        ctx.drawImage(ball, x, y, radius * 2, radius * 2);
+    };
+}
