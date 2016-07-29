@@ -67,15 +67,24 @@ load([
         });
     }
 
-    function counter(ctx, field) {
-        const { pooled, active } = field;
-
-        // a simple particle counter
+    function status(ctx, { dts }, stage, { pooled, active }) {
+        // a simple status display
         ctx.globalAlpha = 1;
-        ctx.fillStyle = '#0ff';
         ctx.font = '24px monospace';
-        ctx.fillText('pooled: ' + pooled.length.toLocaleString(), 8, 56);
-        ctx.fillText('active: ' + active.length.toLocaleString(), 8, 84);
+
+        [{
+            msg: `${Math.round(1000 / dts)}fps`,
+            col: '#0ff',
+        },{
+            msg: `pooled: ${pooled.length.toLocaleString()}`,
+            col: '#f0f',
+        },{
+            msg: `active: ${active.length.toLocaleString()}`,
+            col: '#ff0',
+        }].forEach(({ msg, col }, i) => {
+            ctx.fillStyle = col;
+            ctx.fillText(msg, 8, (i + 1) * 28);
+        })
     }
 
     init((ctx, time, stage) => {
@@ -83,6 +92,6 @@ load([
         update(ctx, time, stage, field);
         remove(ctx, time, stage, field);
         render(ctx, time, stage, field);
-        counter(ctx, field);
+        status(ctx, time, stage, field);
     });
 });

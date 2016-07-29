@@ -31,10 +31,5 @@ export default function init(draw) {
 
         // do work with ts or dts here
         draw(ctx, { ts, dts }, { w, h, hw, hh, x, y, down, });
-
-        // a super simple fps display
-        ctx.fillStyle = '#fff';
-        ctx.font = '24px monospace';
-        ctx.fillText(`${Math.round(1000 / dts)}fps`, 8, 28);
     });
 }
