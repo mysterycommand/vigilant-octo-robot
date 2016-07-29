@@ -2,10 +2,10 @@ import init from './app/init';
 import load from './app/load';
 
 import ParticleField from './lib/particle-field';
-import renderSpark from './lib/renderables/render-spark';
 import renderBall from './lib/renderables/render-ball';
+import renderSpark from './lib/renderables/render-spark';
 
-const { random, round } = Math;
+const { floor, random, round } = Math;
 
 load([
     './images/sparkle-1-0.png',
@@ -13,9 +13,7 @@ load([
     './images/sparkle-1-2.png',
     './images/sparkle-1-1.png',
 ], images => {
-    const field = new ParticleField(500);
-    const spark = renderSpark(images);
-    const ball = renderBall();
+    const field = new ParticleField();
 
     field.init(images);
 
@@ -25,7 +23,11 @@ load([
         const created = pooled
             .splice(0, (down ? 10 : 0))
             .map(particle => {
-                particle.reset(x, y);
+                const render = round(random())
+                    ? renderBall(floor(random() * 360))
+                    : renderSpark(images, 600);
+
+                particle.reset(x, y, render);
                 return particle;
             });
 
@@ -62,8 +64,7 @@ load([
 
     function render(ctx, time, stage, { active }) {
         active.forEach(particle => {
-            ball(ctx, time, stage, particle);
-            // spark(ctx, time, stage, particle);
+            particle.render(ctx, time, stage, particle);
         });
     }
 
