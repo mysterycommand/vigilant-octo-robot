@@ -12,10 +12,9 @@ export default class Particle {
         this.fade = 0.01;
     }
 
-    reset(x, y, render = () => {}) {
+    reset(x, y) {
         this.px = x;
         this.py = y;
-        this.render = render;
 
         this.vx = 0.75 - random() * 1.5;
         this.vy = 0.75 - random() * 1.5;
