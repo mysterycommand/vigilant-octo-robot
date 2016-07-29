@@ -7,24 +7,9 @@ export default class Particle {
 
         this.spin = (π - random() * ππ) / 500;
         this.drag = 0.98;
-        this.grav = 0.025;
+        this.gravity = 0.025;
         this.scale = 1.025;
         this.fade = 0.01;
-    }
-
-    update(ts, dts) {
-        this.px += this.vx * dts;
-        this.py += this.vy * dts;
-
-        this.rotation += this.spin * dts;
-
-        this.vx *= this.drag;
-        this.vy *= this.drag;
-
-        this.vy += this.grav;
-
-        this.radius *= this.scale;
-        this.alpha -= this.fade;
     }
 
     reset(x, y, render = () => {}) {
@@ -38,6 +23,5 @@ export default class Particle {
         this.radius = 16;
         this.rotation = 0;
         this.alpha = 1;
-        this.hue = 242;
     }
 }

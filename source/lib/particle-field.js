@@ -5,6 +5,8 @@ export default class ParticleField {
         this.size = size;
         this.active = [];
         this.pooled = [];
+
+        this.updateFns = [];
     }
 
     init() {
@@ -12,5 +14,18 @@ export default class ParticleField {
         while (pooled.length < size) {
             pooled.push(new Particle());
         }
+    }
+
+    addUpdateFns(fns) {
+        this.updateFns = this.updateFns.concat(fns);
+    }
+
+    update(time, stage) {
+        const { active, updateFns } = this;
+        active.forEach(particle => {
+            updateFns.forEach(fn => {
+                fn(time, stage, particle);
+            });
+        });
     }
 }

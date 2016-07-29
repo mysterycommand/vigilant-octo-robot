@@ -2,8 +2,16 @@ import init from './app/init';
 import load from './app/load';
 
 import ParticleField from './lib/particle-field';
-import renderBall from './lib/renderables/render-ball';
-import renderSpark from './lib/renderables/render-spark';
+import renderBall from './lib/render/ball';
+import renderSpark from './lib/render/spark';
+
+import applyVelocity from './lib/update/apply-velocity';
+import applySpin from './lib/update/apply-spin';
+import applyDrag from './lib/update/apply-drag';
+import applyGravity from './lib/update/apply-gravity';
+import applyScale from './lib/update/apply-scale';
+import applyFade from './lib/update/apply-fade';
+import applyBounce from './lib/update/apply-bounce';
 
 const { floor, random, round } = Math;
 
@@ -15,6 +23,16 @@ load([
 ], images => {
     const field = new ParticleField();
     field.init();
+
+    field.addUpdateFns([
+        applyVelocity,
+        applySpin,
+        applyDrag,
+        applyGravity,
+        applyScale,
+        applyFade,
+        applyBounce,
+    ]);
 
     function create(ctx, time, { x, y, down }, field) {
         const { pooled, active } = field;
@@ -31,17 +49,6 @@ load([
             });
 
         field.active = active.concat(created);
-    }
-
-    function update(ctx, { ts, dts }, { h }, field) {
-        field.active.forEach(particle => {
-            particle.update(ts, dts);
-
-            if (particle.py > h - 50) {
-                particle.py = h - 50;
-                particle.vy = -particle.vy * 0.8;
-            }
-        });
     }
 
     function remove(ctx, time, { w }, field) {
@@ -89,7 +96,7 @@ load([
 
     init((ctx, time, stage) => {
         create(ctx, time, stage, field);
-        update(ctx, time, stage, field);
+        field.update(time, stage);
         remove(ctx, time, stage, field);
         render(ctx, time, stage, field);
         status(ctx, time, stage, field);
